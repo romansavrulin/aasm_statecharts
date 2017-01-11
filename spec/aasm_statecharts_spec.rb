@@ -2,61 +2,16 @@
 # the representation held by Ruby-Graphviz, not the files written
 # to disk; we're dependent on Ruby-Graphviz and dot getting it right.
 #
-# @author Brendan MacDonell
+# @author Brendan MacDonell, Ashley Engelund
+#
 
 require 'spec_helper'
 
-require 'aasm'
-require 'active_record'
+require 'statechart_helper'
+
 
 require 'tmpdir'
 require 'fileutils'
-
-class NoAasm
-end
-
-class EmptyAasm < ActiveRecord::Base
-  include AASM
-end
-
-class SingleState < ActiveRecord::Base
-  include AASM
-
-  aasm do
-    state :single,
-          initial: true,
-          enter: [:foo, :bar],
-          exit: [:baz, :quux]
-  end
-end
-
-class ManyStates < ActiveRecord::Base
-  include AASM
-
-  aasm do
-    state :a, initial: true, exit: :a_exit
-    state :b, enter: :b_enter
-    state :c, final: true
-
-    event :x do
-      transitions from: :a, to: :a, guard: :x_guard
-      transitions from: :b, to: :c
-    end
-
-    event :y do
-      transitions from: :a, to: :b, after: :y_action
-    end
-
-    event :z do
-      transitions from: :b, to: :a, after: [:z1, :z2]
-    end
-
-    event :many_from do
-      transitions from: [:a, :b], to: :z
-    end
-
-  end
-end
 
 
 describe AASM_StateChart do
