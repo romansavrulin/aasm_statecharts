@@ -94,10 +94,11 @@ load_rails!
 ensure_directory! options[:directory]
 
 models = options[:all] ? collect_all_models : collect_models(model_names)
+show_transition_table = options[:transition_table]
 
 models.each do |klass|
   name = klass.name.underscore
-  renderer = AASM_StateChart::Renderer.new(klass)
+  renderer = AASM_StateChart::Renderer.new(klass, show_transition_table)
   filename = "#{options[:directory]}/#{name}.#{options[:format]}"
   renderer.save(filename, format: options[:format])
   puts " * rendered #{name} to #{filename}"
