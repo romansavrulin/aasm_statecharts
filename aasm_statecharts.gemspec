@@ -1,4 +1,4 @@
-require 'aasm-statecharts/version'
+require File.join(__dir__, 'lib','aasm-statecharts', 'version')
 
 Gem::Specification.new do |s|
   s.name        = 'aasm_statecharts'
@@ -9,9 +9,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Brendan MacDonell", "Ashley Engelund"]
   s.email       = ['brendan@macdonell.net', 'ashley@ashleycaroline.com']
 
-
-  globs = File.join('**', '*')
-  s.files       = Dir.glob("{bin,lib}#{globs}") + %w(README.md)
+  s.files       = Dir.glob("#{File.join('{bin,lib}', '**', '*')}") + %w(README.md)
   s.executables = ['aasm_statecharts']
 
   s.homepage    = 'http://rubygems.org/gems/aasm_statecharts'
