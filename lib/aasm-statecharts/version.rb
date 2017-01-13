@@ -1,3 +1,3 @@
 module AASM_StateChart
-  VERSION = '1.02'
+  VERSION = '1.1.01'
 end
