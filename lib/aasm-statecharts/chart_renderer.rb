@@ -195,23 +195,65 @@ module AASM_StateChart
     def render_event(event)
 
       event.transitions.each do |transition|
-        chunks = [event.name]
 
-        chunks << render_guard(transition.options.fetch(:guard, nil))
+        chunks = [event.name]
 
         chunks << render_callbacks(get_callbacks(transition.options, TRANSITION_CALLBACKS))
 
         label = " #{chunks.join(' ')} "
 
-        @graph.add_edges(transition.from.to_s, transition.to.to_s, label: label)
+        if transition.options.fetch(:guard, nil)
+
+          last_guard_node = render_guard(transition.options.fetch(:guard, nil), transition.from.to_s, label )
+
+          @graph.add_edges(last_guard_node, transition.to.to_s, label: "true: #{label}")
+
+        else
+
+          @graph.add_edges(transition.from.to_s, transition.to.to_s, label: label)
+
+        end
+
 
       end
 
     end
 
 
-    def render_guard(guard)
-      guard.present? ? "#{ ([] << guard).flatten }" : ''
+
+    def render_guard(guard, incoming_node, incoming_label)
+      guard_list = ([] << guard).flatten
+      display_str = guard.present? ? "#{guard_list}" : ''
+
+      guard_label = guard_list.join(' & ')
+
+      from_node = incoming_node
+      last_label = incoming_label
+
+      from_label = ''
+
+=begin
+      guard_list.each do | g |
+
+        guard_label = "#{g.to_s} == true ?"
+
+        node = add_node guard_label, :guard_node_style, guard_label
+
+        # TODO don't add if we already have one
+        @graph.add_edges(from_node, guard_label, label: from_label)
+
+        from_node = guard_label
+        from_label = 'yes'
+
+      end
+=end
+
+      guard_node = add_node guard_label, :guard_node_style, guard_label
+
+      @graph.add_edges(from_node, guard_label, label: from_label)
+
+      guard_node # return the last node so we can connect an outgoing edge to it
+
     end
 
 
@@ -288,6 +330,10 @@ module AASM_StateChart
               fontname: 'Arial',
               fontsize: 9,
               penwidth: 0.7,
+          },
+
+          guard_node_style: {
+            shape: :diamond,
           },
 
           start_node_style: {
