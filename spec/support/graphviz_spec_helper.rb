@@ -18,4 +18,7 @@ module GraphvizSpecHelper
     expect(obj['label'].source).to match regex
   end
 
+  def expect_label_doesnt_match(obj, regex)
+    expect(obj['label'].source).not_to match regex
+  end
 end

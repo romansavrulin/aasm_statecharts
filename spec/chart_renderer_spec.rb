@@ -48,8 +48,8 @@ describe AASM_StateChart::Chart_Renderer do
 
       nodes = renderer.graph.each_node
 
-      expect_label_matches(nodes['single'], /entry: foo bar/)
-      expect_label_matches(nodes['single'], /exit: baz quux/)
+      expect_label_matches(nodes['single'], /enter state action: foo, bar/)
+      expect_label_matches(nodes['single'], /exit state action: baz, quux/)
 
     end
 
@@ -107,23 +107,46 @@ describe AASM_StateChart::Chart_Renderer do
 
     require_relative '../spec/fixtures/no_rails_many_states'
 
-    renderer = AASM_StateChart::Chart_Renderer.new(NoRailsManyStates, true)
+    renderer = AASM_StateChart::Chart_Renderer.new(NoRailsManyStates)
 
     describe 'formatting' do
 
     end
 
     describe 'guards' do
-      it 'finds a single guard: :item' do
-        pending
+
+      let(:edges) { renderer.graph.each_edge }
+
+
+      describe 'finds a single guard: :item' do
+
+        it 'a to a guard: xa_guard' do
+          a_a = find_edge(edges, 'a', 'a')
+          expect_label_matches(a_a, /x \[:xa_guard\]/)
+        end
+
       end
 
-      it 'finds an array of guards: [:g1, :g2]' do
-        pending
+      describe 'finds an array of guards' do
+
+        it 'b to c [:xbc1_guard, :xbc2_guard]' do
+          b_c = find_edge(edges, 'b', 'c')
+          expect_label_matches(b_c, /x \[:xbc1_guard, :xbc2_guard\]/)
+        end
+
+        it 'a to c  [[:many_guard1, :many_guard2], :many_guard3]' do
+          a_c = find_edge(edges, 'a', 'c')
+          expect_label_matches(a_c, /\[:many_guard1, :many_guard2, :many_guard3\]/)
+        end
       end
 
-      it 'finds guards using if: if_condition' do
-        pending
+      describe 'finds guards using if: if_condition' do
+
+        #  transitions from: :a, to: :b, before: :y_before, after: :y_after, if: :y_is_ok?
+        it 'a to b if: :y_is_ok?' do
+          a_b = find_edge(edges, 'a', 'b')
+          expect_label_matches(a_b, /y_is_ok?/)
+        end
       end
 
     end
@@ -131,15 +154,15 @@ describe AASM_StateChart::Chart_Renderer do
     describe 'method callbacks' do
 
       it 'enter method ' do
-
+        pending
       end
 
       it 'after methods' do
-
+        pending
       end
 
       it 'before methods' do
-
+        pending
       end
     end
 
@@ -185,9 +208,11 @@ describe AASM_StateChart::Chart_Renderer do
     end
 
     describe 'nodes' do
+
       let(:nodes) { renderer.graph.each_node }
 
-      it_should_behave_like 'it has this many nodes', renderer, 8
+
+      it_should_behave_like 'it has this many nodes', renderer, 7
 
       describe 'labels are tables' do
 
@@ -218,4 +243,27 @@ describe AASM_StateChart::Chart_Renderer do
     it_should_behave_like 'saves to a file', NoRailsManyStates, 'dot'
 
   end
+
+
+  describe "option: don't show entry/exit stuff" do
+
+    describe 'the single state example' do
+
+      require_relative '../spec/fixtures/no_rails_single_state'
+
+      renderer = AASM_StateChart::Chart_Renderer.new(NoRailsSingleState, false, { hide_enter_exit: true })
+
+      it 'does not show enter or exit labels' do
+
+        nodes = renderer.graph.each_node
+
+        expect_label_doesnt_match(nodes['single'], /enter state action: foo, bar/)
+        expect_label_doesnt_match(nodes['single'], /exit state action: baz, quux/)
+      end
+
+    end
+
+  end
+
+
 end

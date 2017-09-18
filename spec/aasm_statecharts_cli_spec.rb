@@ -13,7 +13,7 @@
 
 require 'spec_helper'
 
-load File.expand_path(File.join(__dir__, '..', 'bin', 'aasm_statecharts'))
+load File.expand_path(File.join(__dir__, '..', 'bin', 'cli_tester.rb'))
 
 
 RSpec.shared_examples 'handle args' do |args, result|
@@ -169,32 +169,33 @@ describe AASM_StateChart::AASM_Statecharts_CLI do
       describe 'graphs' do
         args = {short: 'g', long: 'graph-configs', option: 'graph', model: 'single_state'}
 
-        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::GRAPH_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::GRAPH_ATTRIBS_TITLE})([\s\S]*)single_state.png/
+
+        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::GRAPH_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::GRAPH_ATTRIBS_TITLE})([\s\S]*)single_state.png/
 
       end
 
       describe 'nodes' do
         args = {short: 'g', long: 'graph-configs', option: 'nodes', model: 'single_state'}
-        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::NODE_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::NODE_ATTRIBS_TITLE})([\s\S]*)single_state.png/
+        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::NODE_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::NODE_ATTRIBS_TITLE})([\s\S]*)single_state.png/
       end
 
       describe 'edges' do
         args = {short: 'g', long: 'graph-configs', option: 'edges', model: 'single_state'}
-        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::EDGE_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::EDGE_ATTRIBS_TITLE})([\s\S]*)single_state.png/
+        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::EDGE_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::EDGE_ATTRIBS_TITLE})([\s\S]*)single_state.png/
 
       end
 
       describe 'colors' do
         args = {short: 'g', long: 'graph-configs', option: 'colors', model: 'single_state'}
-        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::COLORS_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::COLORS_ATTRIBS_TITLE})([\s\S]*)single_state.png/
+        it_will 'test graph-attrib option:', args, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::COLORS_ATTRIBS_TITLE})/, /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::COLORS_ATTRIBS_TITLE})([\s\S]*)single_state.png/
 
       end
 
       describe 'all' do
         args = {short: 'g', long: 'graph-configs', option: 'blorf', model: 'single_state'}
 
-        it_will 'handle args', ["-#{args[:short]}"], /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::ALL_ATTRIBS_TITLE})/
-        it_will 'handle args', ["--#{args[:long]}"], /Title([\s\S]*)(#{AASM_StateChart::AASM_StateCharts::ALL_ATTRIBS_TITLE})/
+        it_will 'handle args', ["-#{args[:short]}"], /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::ALL_ATTRIBS_TITLE})/
+        it_will 'handle args', ["--#{args[:long]}"], /Title([\s\S]*)(#{AASM_StateChart::GraphvizOptions::ALL_ATTRIBS_TITLE})/
 
         it_will 'raise error with args', ["-#{args[:short]}", "#{args[:option]}"], AASM_StateChart::CLI_Inputs_ERROR
         it_will 'raise error with args', ["-#{args[:long]}", "#{args[:option]}"], AASM_StateChart::CLI_Inputs_ERROR
