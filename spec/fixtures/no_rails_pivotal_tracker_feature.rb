@@ -13,10 +13,10 @@ class NoRailsPivotalTrackerFeature
     state :started, enter: :write_feature_or_spec, exit: :all_tests_pass
     state :waiting_for_scrum_review
 
-    state :waiting_for_client_review, enter: :press_FINISHED_button,  exit: :press_DELIVER_button
+    state :waiting_for_Client_Review, enter: :press_FINISHED_button,  exit: :press_DELIVER_button
 
-    state :accepted, enter: :press_Accepted_button
-    state :declined, enter: :press_Rejected_button
+    state :Accepted, enter: :press_Accepted_button
+    state :Declined, enter: :press_Rejected_button
 
 
     event :vote_on_feature do
@@ -33,7 +33,7 @@ class NoRailsPivotalTrackerFeature
     end
 
     event :approved_in_scrum do
-      transitions from: :waiting_for_scrum_review, to: :waiting_for_client_review
+      transitions from: :waiting_for_scrum_review, to: :waiting_for_Client_Review
     end
 
     event :rejected_in_scrum do
@@ -45,11 +45,11 @@ class NoRailsPivotalTrackerFeature
     end
 
     event :client_accepted do
-      transitions from: :waiting_for_client_review, to: :accepted
+      transitions from: :waiting_for_Client_Review, to: :Accepted
     end
 
     event :client_rejected do
-      transitions from: :waiting_for_client_review, to: :declined
+      transitions from: :waiting_for_Client_Review, to: :Declined
     end
   end
 

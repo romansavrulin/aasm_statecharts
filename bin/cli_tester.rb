@@ -1,5 +1,6 @@
-require '../lib/aasm-statecharts/aasm_state_charts'
-load 'aasm_statecharts'
+require_relative '../lib/aasm_statecharts'
+
+load File.join(__dir__, 'aasm_statecharts')
 
 
 # ["-#{arg_info[:short]}", "#{arg_info[:option]}", "#{arg_info[:model]}"]

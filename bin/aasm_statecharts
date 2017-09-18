@@ -18,6 +18,7 @@ module AASM_StateChart
     IndentSpacer = ' ' * 40
     NEXTLINE = "\n#{IndentSpacer}"
 
+
     def initialize(argv)
 
       @out = ''
@@ -30,7 +31,8 @@ module AASM_StateChart
           directory: './doc',
           models: [],
           version: false,
-          no_rails: false
+          no_rails: false,
+          hide_enter_exit: false
           #          dump_configs: false,
           #          path: false,
           #          root: false,
@@ -40,7 +42,7 @@ module AASM_StateChart
       @formats = pretty_formats_list
 
 
-      argv << '-h' if argv.empty?
+      argv << '-h' if args_empty?(argv) #argv.empty?
 
       process argv
 
@@ -67,6 +69,7 @@ module AASM_StateChart
 
       out_str
     end
+
 
     def args_empty?(args)
       result = true
@@ -99,7 +102,7 @@ module AASM_StateChart
       # binary only options = :all, :version, :no_rails
       # if there are any other options, they've been inserted (and set) when options with .parse!
 
-      defaults_or_binary = [:format, :directory, :models, :all, :version, :no_rails]
+      defaults_or_binary = [:format, :directory, :models, :all, :version, :no_rails, :hide_enter_exit]
       remaining_opts = opts.reject { |o| defaults_or_binary.include?(o) }
 
       !opts[:all] && !opts[:version] && remaining_opts.count == 0
@@ -125,7 +128,7 @@ module AASM_StateChart
 
           if !opts[:all] && !version_or_graph_configs_opt?(args, opts)
 
-            raise  AASM_StateChart::AASM_NoModels, AASM_NoModels.error_message("(cli) Missing model or '--all' option:  You must either specify a model to diagram or use the --all option.\n\n  args: #{args}\n options: #{opts.inspect}")
+            raise AASM_StateChart::AASM_NoModels, AASM_NoModels.error_message("(cli) Missing model or '--all' option:  You must either specify a model to diagram or use the --all option.\n\n  args: #{args}\n options: #{opts.inspect}")
 
           else # opts[:all] || version_or_graph_configs_opt?(args, opts)
 
@@ -192,7 +195,7 @@ module AASM_StateChart
           @out = AASM_StateChart::VERSION
         end
 
-        opts.on('-a','--all', "Generate diagrams for all models in the current or included directory.") do
+        opts.on('-a', '--all', "Generate diagrams for all models in the current or included directory.") do
           @options[:all] = true
         end
 
@@ -224,6 +227,10 @@ module AASM_StateChart
 
         opts.on('-t', '--table', 'Create a state transition table') do
           @options[:transition_table] = true
+        end
+
+        opts.on('-e', '--enter-exit-hide', "Hide (do not show) the 'enter:' and 'exit:' labels on each state node ") do
+          @options[:hide_enter_exit] = true
         end
 
         opts.on('-f', '--file-type TYPE',
@@ -261,10 +268,10 @@ module AASM_StateChart
 
         opts
       end
-      .parse! args
+          .parse! args
 
 
-      # parse! will remove all of the arguments and option it successfully parses
+      # parse! will remove all of the arguments and options it successfully parses
 
 
       args.each do |model|
@@ -282,7 +289,7 @@ module AASM_StateChart
 
 end
 
-
+# Must comment this out when testing the CLI with RubyMine (else the --required ... --formatting... options are passed in)
 AASM_StateChart::AASM_Statecharts_CLI.new($*)
 
 $VERBOSE = orig_verbose

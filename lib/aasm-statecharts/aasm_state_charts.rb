@@ -99,7 +99,7 @@ module AASM_StateChart
                 raise NoStates_Error, "ERROR: No states found for #{klass.name}!  No diagram generated"
               else
 
-                renderer = AASM_StateChart::Chart_Renderer.new(klass, @show_transition_table, @config_options)
+                renderer = AASM_StateChart::Chart_Renderer.new(klass, @show_transition_table, @config_options.merge({hide_enter_exit: @options.fetch(:hide_enter_exit, false)}))
 
                 filename = File.join(@output_dir, "#{name}.#{@format}")
 
