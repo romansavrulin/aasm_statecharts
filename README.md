@@ -68,6 +68,8 @@ If we invoke `aasm_statecharts claim`, then the following diagram will be writte
 ![Claim Statechart](claim.png)
 
 
+The above was generated with the `--config` option and a custom configuration .yml file. (That explains the blue and green and other formatting.)
+
 Usage
 -----
 
