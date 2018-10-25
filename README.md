@@ -65,7 +65,7 @@ end
 
 If we invoke `aasm_statecharts claim`, then the following diagram will be written to ./doc/claim.png:
 
-![Claim Statechart](./doc/claim.png)
+![Claim Statechart](claim.png)
 
 
 Usage
