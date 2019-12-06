@@ -161,7 +161,7 @@ module AASM_StateChart
 
     def get_callbacks(options, keys, join_str = ' ')
       get_options(options, keys)
-          .map { |callback| "#{callback}" }
+          .map { |callback| callback.is_a?(Proc) ? '<Proc>' : "#{callback}" }
           .join(join_str)
     end
 
@@ -232,7 +232,7 @@ module AASM_StateChart
 
 
     def render_guard(guard)
-      guard.present? ? "if ( #{ humanize_caps_retained( ([] << guard).flatten.join(', ') )} )" : '' # TODO i18n 'if'
+      guard.present? ? "if ( #{ humanize_caps_retained( ([] << (guard.is_a?(Proc) ? '<Proc>' : guard)).flatten.join(', ') )} )" : '' # TODO i18n 'if'
     end
 
 
