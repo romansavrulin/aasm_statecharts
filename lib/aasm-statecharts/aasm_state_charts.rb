@@ -63,7 +63,7 @@ module AASM_StateChart
 
       load_rails unless @options[:no_rails]
 
-      @models = get_models options[:all], options[:models]
+      @models = get_models options
 
       @show_transition_table = options[:transition_table]
 
@@ -178,9 +178,16 @@ module AASM_StateChart
     end
 
 
-    def get_models(all_option, models)
+    def get_models(options)
 
+      all_option, models = options[:all], options[:models]
       model_classes = []
+
+      unless options[:no_rails]
+        # use Rails autoloader for passed-in classes
+        puts "Using Rails Class loader!"
+        return model_classes + models
+      end
 
       if all_option
         puts "\n\nTBD: all_option\n\n"

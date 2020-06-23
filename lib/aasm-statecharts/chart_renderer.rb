@@ -112,6 +112,7 @@ module AASM_StateChart
     def save(filename, format: 'png', graph_options: (@default_config[:graph_style]))
       opts = {}
       opts.merge!(graph_options).merge({ format => filename }) # FIXME why can't I merge in graph_options? can't seem to use opts
+      FileUtils.mkdir_p  File.dirname(filename)
       @graph.output({ format => filename })
     end
 
