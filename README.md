@@ -87,6 +87,9 @@ Usage: aasm_statechart [options] <model> [models ...]
   If you are going to graph a model that is a subclass of ActiveRecord (or any other Rails class),
   you must run this from your <RailsRoot> directory.  Be sure to use the --directory option to specify the location of the models.
 
+  Example: To create a graph for the object MyModule::MyClass that is located in app/lib/my_module/my_class.rb
+    aasm_statecharts MyModule::MyClass
+
   Example: To create a graph for the model MembershipApplication that is a subclass of ActiveRecord (in Rails):
     aasm_statecharts application
 
